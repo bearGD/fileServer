@@ -10,7 +10,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,15 +36,17 @@ public class App {
 	/**
 	 * 接收到文件存放于本地的地址
 	 */
-	String filePath = "";
+	String filePath = "E:/MyServer/file";
 
 	public void start() {
 
-		// 获取存放文件的本地地址
-		Scanner sc = new Scanner(System.in);
-		System.out.println("请输入您要存放文件的本地地址:");
-		filePath = sc.next();
-		sc.close();
+		// // 获取存放文件的本地地址
+		// Scanner sc = new Scanner(System.in);
+		// System.out.println("请输入您要存放文件的本地地址:");
+		// filePath = sc.next();
+		// sc.close();
+
+		System.out.println("服务器启动!");
 
 		try {
 			serverSocket = new ServerSocket(port);
@@ -77,6 +78,7 @@ public class App {
 						byte[] info = data.toByteArray();
 						String file = "";
 
+						// 生成文件名字
 						try {
 							byte[] hash = MessageDigest.getInstance("SHA-256").digest(info);
 							file = new BigInteger(1, hash).toString(16);
@@ -84,7 +86,7 @@ public class App {
 							e.printStackTrace();
 						}
 
-						try (FileOutputStream out = new FileOutputStream(new File(filePath,file))) {
+						try (FileOutputStream out = new FileOutputStream(new File(filePath, file))) {
 							out.write(info);
 							System.out.println("上传完成!");
 						} catch (Exception e) {
@@ -105,6 +107,7 @@ public class App {
 	public static void main(String[] args) {
 		App server = new App();
 		server.start();
+		
 	}
 
 }
